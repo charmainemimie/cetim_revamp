@@ -64,24 +64,139 @@ return (
 onSubmit={handleSubmit}
 className="space-y-4"
 >
-<input
-name="inventoryNo"
-defaultValue={editingEquipment?.inventoryNo}
-placeholder="Inventory Number"
-className="w-full border p-2 rounded"
-/>
-<input
-name="designation"
-defaultValue={editingEquipment?.designation}
-placeholder="Designation"
-className="w-full border p-2 rounded"
-/>
-<input
-name="office"
-defaultValue={editingEquipment?.office}
-placeholder="Office"
-className="w-full border p-2 rounded"
-/>
+<div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-1">Inventory No</label>
+                  <input
+                    name="inventoryNo"
+                    defaultValue={editingEquipment?.inventoryNo}
+                    required
+                    className="w-full px-3 py-2 bg-muted border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-1">Barcode</label>
+                  <input
+                    name="barcode"
+                    defaultValue={editingEquipment?.barcode}
+                    required
+                    className="w-full px-3 py-2 bg-muted border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-1">Designation</label>
+                <input
+                  name="designation"
+                  defaultValue={editingEquipment?.designation}
+                  required
+                  className="w-full px-3 py-2 bg-muted border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-1">Acquisition Date</label>
+                  <input
+                    name="acquisitionDate"
+                    type="date"
+                    defaultValue={editingEquipment?.acquisitionDate}
+                    required
+                    className="w-full px-3 py-2 bg-muted border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-1">Status</label>
+                  <select
+                    name="status"
+                    defaultValue={editingEquipment?.status || "Bon"}
+                    className="w-full px-3 py-2 bg-muted border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                  >
+                    <option value="Bon">Bon</option>
+                    <option value="En panne">En panne</option>
+                    <option value="Réformé">Réformé</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-1">Office</label>
+                  <input
+                    name="office"
+                    defaultValue={editingEquipment?.office}
+                    required
+                    className="w-full px-3 py-2 bg-muted border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-1">Brand</label>
+                  <input
+                    name="brand"
+                    defaultValue={editingEquipment?.brand}
+                    className="w-full px-3 py-2 bg-muted border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-1">Processor</label>
+                  <input
+                    name="processor"
+                    defaultValue={editingEquipment?.processor}
+                    className="w-full px-3 py-2 bg-muted border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-1">Hard Drive</label>
+                  <input
+                    name="hardDrive"
+                    defaultValue={editingEquipment?.hardDrive}
+                    className="w-full px-3 py-2 bg-muted border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-1">RAM</label>
+                  <input
+                    name="ram"
+                    defaultValue={editingEquipment?.ram}
+                    className="w-full px-3 py-2 bg-muted border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-1">OS</label>
+                  <input
+                    name="os"
+                    defaultValue={editingEquipment?.os}
+                    className="w-full px-3 py-2 bg-muted border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-1">Direction</label>
+                  <input
+                    name="direction"
+                    defaultValue={editingEquipment?.direction}
+                    className="w-full px-3 py-2 bg-muted border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-1">Serial Number</label>
+                  <input
+                    name="serialNumber"
+                    defaultValue={editingEquipment?.serialNumber}
+                    className="w-full px-3 py-2 bg-muted border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+              </div>
+
 <button
 type="submit"
 className="w-full bg-primary text-white py-2 rounded"
