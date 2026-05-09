@@ -1,0 +1,36 @@
+import { Equipment } from "../types"
+
+export const initialEquipment: Equipment[] = [
+    {
+    id: "1",
+    inventoryNo: "F5000005",
+    barcode: "F5000005",
+    designation: "ONDULEUR TRIP LITE",
+    acquisitionDate: "1999-05-30",
+    status: "Réformé",
+    office: "B2-09",
+    brand: "Trip Lite",
+    processor: "-",
+    hardDrive: "-",
+    ram: "-",
+    os: "-",
+    direction: "DSI",
+    serialNumber: "TL-99-001",
+    },
+    {
+    id: "2",
+    inventoryNo: "F5000102",
+    barcode: "F5000102",
+    designation: "PC Bureau Dell OptiPlex",
+    acquisitionDate: "2022-03-15",
+    status: "Bon",
+    office: "A1-01",
+    brand: "Dell",
+    processor: "Intel i5-12400",
+    hardDrive: "512GB SSD",
+    ram: "16GB",
+    os: "Windows 11",
+    direction: "DSI",
+    serialNumber: "DELL-2022-001",
+},
+]
