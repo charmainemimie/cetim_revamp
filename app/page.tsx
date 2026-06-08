@@ -32,15 +32,7 @@ export default function Home() {
   const ai = useAIChat(equipmentState.equipment, equipmentState.stats)
 
   if (!auth.isAuthenticated) {
-    return (
-      <LoginForm
-        onLogin={auth.login}
-        isLoading={auth.isLoading}
-        loginError={auth.loginError}
-        isLocked={auth.isLocked}
-        lockTimer={auth.lockTimer}
-      />
-    )
+    return <LoginForm />
   }
 
   const handleDeleteConfirm = async () => {
@@ -57,12 +49,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header
-        currentUser={auth.currentUser}
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        onLogout={auth.logout}
-      />
+      <Header activeTab={activeTab} setActiveTab={setActiveTab} />
 
       <main className="p-6">
         {activeTab === "dashboard" && (

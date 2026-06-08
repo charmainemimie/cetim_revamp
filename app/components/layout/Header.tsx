@@ -1,33 +1,47 @@
 "use client";
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 import {
   Monitor,
-  HardDrive,
-  Cpu,
-  Search,
-  Plus,
-  Trash2,
-  Edit,
-  X,
   Bot,
-  Send,
-  Lock,
   UserCheck,
   LogOut,
-  Shield,
 } from "lucide-react";
-import { User } from "../../types";
+import { useUser, useClerk } from "@clerk/nextjs"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "../../../components/ui/alert-dialog"
+
 interface HeaderProps {
-  currentUser: User | null;
   activeTab: string;
   setActiveTab: (tab: "dashboard" | "equipment" | "ai") => void;
-  onLogout: () => void;
 }
-export function Header({
-  currentUser,
-  activeTab,
-  setActiveTab,
-  onLogout,
-}: HeaderProps) {
+
+export function Header({ activeTab, setActiveTab }: HeaderProps) {
+  const [showLogoutModal, setShowLogoutModal] = useState(false)
+  const router = useRouter()
+  const { user } = useUser()
+  const { signOut } = useClerk()
+
+  const handleSignOut = async () => {
+    try {
+      await signOut()
+      router.push("/")
+    } catch (error) {
+      console.error("Sign out failed:", error)
+    }
+  }
+
+  const onLogoutConfirm = () => {
+    setShowLogoutModal(false)
+    handleSignOut()
+  }
   return (
     <header className="bg-primary text-primary-foreground px-6 py-4">
       <div className="flex items-center justify-between">
@@ -63,18 +77,35 @@ export function Header({
             AI Assistant
           </button>
           <div className="flex items-center gap-2">
-          <UserCheck className="h-8 w-8" />
-            <p className="text-sm font-medium">{currentUser?.name} </p>
+            <UserCheck className="h-8 w-8" />
+            <p className="text-sm font-medium">{user?.fullName || user?.firstName || user?.username}</p>
           </div>
-          <button
-            onClick={onLogout}
-            className="p-2 hover:bg-white/10 rounded-lg transition"
-            title="Sign out"
-          >
-            <LogOut className="h-5 w-5" />
-          </button>
+          <div>
+            <button 
+              onClick={() => setShowLogoutModal(true)}
+              className="p-2 hover:bg-white/10 rounded-lg transition" 
+              title="Sign out"
+            >
+              <LogOut className="h-5 w-5" />
+            </button>
+          </div>
         </div>
       </div>
+
+      <AlertDialog open={showLogoutModal} onOpenChange={setShowLogoutModal}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Sign out?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to sign out? You will need to sign in again to access the application.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="flex justify-end gap-3">
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={onLogoutConfirm}>Sign Out</AlertDialogAction>
+          </div>
+        </AlertDialogContent>
+      </AlertDialog>
     </header>
   );
 }

@@ -1,90 +1,71 @@
 "use client"
 
-import { useState } from "react"
-import { mockUsers } from "../data/users"
+import { useState, useEffect } from "react"
 import { User } from "../types"
+import { useUser, useClerk } from "@clerk/nextjs" // Changed SignedOut to useClerk
 
 export function useAuth() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [currentUser, setCurrentUser] = useState<User | null>(null)
+  const { isSignedIn, user } = useUser()
+  const { signOut } = useClerk() // Access the official programmatic sign-out method
 
-  const [loginError, setLoginError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [loginError, setLoginError] = useState("")
 
   const [loginAttempts, setLoginAttempts] = useState(0)
   const [isLocked, setIsLocked] = useState(false)
   const [lockTimer, setLockTimer] = useState(0)
 
-  const login = async (loginId: string, password: string) => {
-    if (isLocked) return false
-
-    setIsLoading(true)
-    setLoginError("")
-
-    await new Promise((resolve) => setTimeout(resolve, 800))
-
-    const user = mockUsers.find(
-      (u) =>
-        (u.email.toLowerCase() === loginId.toLowerCase() ||
-          u.id.toLowerCase() === loginId.toLowerCase()) &&
-        u.password === password
-    )
-
-    if (user) {
-      setIsAuthenticated(true)
-
-      setCurrentUser({
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-      })
-
-      setLoginAttempts(0)
-      setIsLoading(false)
-
-      return true
-    }
-
-    const newAttempts = loginAttempts + 1
-    setLoginAttempts(newAttempts)
-
-    if (newAttempts >= 3) {
-      setIsLocked(true)
-      setLockTimer(30)
-
-      const interval = setInterval(() => {
+  useEffect(() => {
+    let interval: number | undefined
+    if (isLocked) {
+      interval = window.setInterval(() => {
         setLockTimer((prev) => {
           if (prev <= 1) {
-            clearInterval(interval)
+            window.clearInterval(interval)
             setIsLocked(false)
             setLoginAttempts(0)
             return 0
           }
-
           return prev - 1
         })
       }, 1000)
     }
 
-    setLoginError(
-      newAttempts >= 3
-        ? "Too many failed attempts."
-        : `Invalid credentials. ${3 - newAttempts} attempts remaining.`
-    )
+    return () => window.clearInterval(interval)
+  }, [isLocked])
 
+  const login = async (_loginId: string, _password: string) => {
+    // Keeping your signature interface clean for existing login callers
     setIsLoading(false)
-
+    setLoginError("")
     return false
   }
 
-  const logout = () => {
-    setIsAuthenticated(false)
-    setCurrentUser(null)
+  const logout = async () => {
+    setIsLoading(true)
+    try {
+      // Correctly invokes Clerk sign out and optionally redirects
+      await signOut({ redirectUrl: "/" }) 
+    } catch (error) {
+      console.error("Failed to log out:", error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
+  // Safe mapping to your local User interface type
+  const currentUser: User | null = user
+    ? {
+        id: user.id,
+        name: user.fullName || user.firstName || user.username || "",
+        // Corrected primaryEmailAddress handling
+        email: user.primaryEmailAddress?.emailAddress || user.emailAddresses?.[0]?.emailAddress || "",
+        role: "user",
+      }
+    : null
+
   return {
-    isAuthenticated,
+    isAuthenticated: !!isSignedIn,
     currentUser,
     login,
     logout,
