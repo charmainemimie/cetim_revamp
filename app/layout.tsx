@@ -38,7 +38,19 @@ export default function RootLayout({
   return (
     <html lang="en" className="bg-background">
       <body className="font-sans antialiased min-h-screen">
-        <ClerkProvider>{children}</ClerkProvider>
+        {/* Added the localization prop here */}
+        <ClerkProvider
+          localization={{
+            signIn: {
+              start: {
+                title: "IT Equipment Manager",
+                subtitle: "Sign in to manage your workplace infrastructure",
+              },
+            },
+          }}
+        >
+          {children}
+        </ClerkProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
